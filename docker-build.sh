@@ -13,7 +13,7 @@ mkdir target/dependency
 echo ""
 echo "Docker build"
 echo ""
-docker build --no-cache -t io.geovaneshimizu/whatstune .
+docker build -t io.geovaneshimizu/whatstune .
 
 echo ""
 echo "Build finished"
