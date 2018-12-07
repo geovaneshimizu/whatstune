@@ -1,0 +1,44 @@
+package io.geovaneshimizu.whatstune.music;
+
+import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
+
+import io.geovaneshimizu.whatstune.location.CityName;
+import io.geovaneshimizu.whatstune.location.GeoCoordinates;
+import io.geovaneshimizu.whatstune.weather.Climate;
+import io.geovaneshimizu.whatstune.weather.Weather;
+import io.geovaneshimizu.whatstune.weather.WeatherService;
+
+@Component
+class ClimateCategorySelector implements CategorySelector {
+
+    private final WeatherService weatherService;
+
+    private final ClimateCategoryMapper climateCategoryMapper;
+
+    private final Logger logger;
+
+    ClimateCategorySelector(WeatherService weatherService,
+                            ClimateCategoryMapper climateCategoryMapper,
+                            Logger logger) {
+        this.weatherService = weatherService;
+        this.climateCategoryMapper = climateCategoryMapper;
+        this.logger = logger;
+    }
+
+    @Override
+    public Category byCityName(CityName cityName) {
+        logger.debug("Selecting category by weather in {}", cityName);
+        Weather weather = weatherService.currentWeatherByCityName(cityName);
+        logger.debug("Current weather {} in {}", weather, cityName);
+        return climateCategoryMapper.apply(Climate.basedOn(weather));
+    }
+
+    @Override
+    public Category byGeoCoordinates(GeoCoordinates coordinates) {
+        logger.debug("Selecting category by weather in {}", coordinates);
+        Weather weather = weatherService.currentWeatherByCoordinates(coordinates);
+        logger.debug("Current weather {} in {}", weather, coordinates);
+        return climateCategoryMapper.apply(Climate.basedOn(weather));
+    }
+}
