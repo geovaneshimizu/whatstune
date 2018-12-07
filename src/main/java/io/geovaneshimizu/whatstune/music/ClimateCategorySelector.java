@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import io.geovaneshimizu.whatstune.location.CityName;
 import io.geovaneshimizu.whatstune.location.GeoCoordinates;
 import io.geovaneshimizu.whatstune.weather.Climate;
-import io.geovaneshimizu.whatstune.weather.Weather;
 import io.geovaneshimizu.whatstune.weather.WeatherService;
 
 @Component
@@ -29,16 +28,18 @@ class ClimateCategorySelector implements CategorySelector {
     @Override
     public Category byCityName(CityName cityName) {
         logger.debug("Selecting category by weather in {}", cityName);
-        Weather weather = weatherService.currentWeatherByCityName(cityName);
-        logger.debug("Current weather {} in {}", weather, cityName);
-        return climateCategoryMapper.apply(Climate.basedOn(weather));
+        return weatherService.currentWeatherByCityName(cityName)
+                .map(Climate::basedOn)
+                .map(climateCategoryMapper)
+                .orElse(Category.ROCK); // \m/
     }
 
     @Override
     public Category byGeoCoordinates(GeoCoordinates coordinates) {
         logger.debug("Selecting category by weather in {}", coordinates);
-        Weather weather = weatherService.currentWeatherByCoordinates(coordinates);
-        logger.debug("Current weather {} in {}", weather, coordinates);
-        return climateCategoryMapper.apply(Climate.basedOn(weather));
+        return weatherService.currentWeatherByCoordinates(coordinates)
+                .map(Climate::basedOn)
+                .map(climateCategoryMapper)
+                .orElse(Category.ROCK); // \m/
     }
 }

@@ -1,3 +1,8 @@
 # SPRING
 spring:
   application.name: whatstune
+
+whatstune:
+  integration:
+    openweather:
+      api-key: ${WHATSTUNE_OPEN_WEATHER_API_KEY:}
