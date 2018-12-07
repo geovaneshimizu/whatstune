@@ -6,3 +6,7 @@ whatstune:
   integration:
     openweather:
       api-key: ${WHATSTUNE_OPEN_WEATHER_API_KEY:}
+
+    spotify:
+      client-id: ${WHATSTUNE_SPOTIFY_CLIENT_ID:}
+      client-secret: ${WHATSTUNE_SPOTIFY_CLIENT_SECRET:}
